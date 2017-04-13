@@ -1,0 +1,60 @@
+{%extends "base.html"%}
+
+{%block css%}
+    <link type="text/css" rel="stylesheet" href="/static/style/daterangepicker-bs3.css"/>
+{%endblock%}
+{%block js%}
+    <script type="text/javascript" src="/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker.js"></script>
+{%endblock%}
+
+{%block title%}基本信息{%endblock%}
+
+{%block nav_order%}
+        <li role="presentation" class="active">
+            <a href="/order">订单管理</a>
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-info"> <a href="/order/all">所有订单</a> </li>
+                    <li class="list-group-item"> <a href="/order/apply">基本信息</a> </li>
+                    <li class="list-group-item"> <a href="/order/promotion">额度提升</a> </li>
+                    <li class="list-group-item"> <a href="/order/loan">贷款审核</a> </li>
+                    <li class="list-group-item"> <a href="/order/collection">催收订单</a> </li>
+                    <li class="list-group-item disabled"> <a href="/order/trendsinsight">趋势分析</a> </li>
+                </ul>
+            </div>
+        </li>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-10">
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='timeBox' name='today'>
+        <a href="#" name="today"    class="btn btn-primary" role="button">今天</a>
+        <a href="#" name="yestoday" class="btn btn-default" role="button">昨天</a>
+        <a href="#" name="toweek"   class="btn btn-default" role="button">本周</a>
+        <a href="#" name="tomonth"  class="btn btn-default" role="button">本月</a>
+        <a href="#" name="custom"   class="btn btn-default" role="button">自定义时间</a>
+    </div>
+    <div class='boxA' id='orderTable'>
+        <table cellpadding="0" cellspacing="0" border="0" class="display" width="100%" id="apply_order">
+            <thead>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </tfoot>
+        </table>
+        <div class="clear"></div>
+    </div>
+</div>
+{%endblock%}

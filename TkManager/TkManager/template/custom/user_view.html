@@ -1,0 +1,41 @@
+{%extends "base.html"%}
+
+{%block title%}用户查询{%endblock%}
+
+{%block js%}
+<!-- for test only -->
+{%endblock%}
+
+{%block nav_customservice%}
+<li role="presentation" class="active">
+    <a href="/custom">客服中心</a>
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-info">
+                <a href="/custom/user_view">用户查询</a>
+            </li>
+            <li class="list-group-item">
+                <a href="/custom/record">操作记录</a>
+            </li>
+            <li class="list-group-item">
+                <a href="/custom/feedback">用户反馈</a>
+            </li>
+            <li class="list-group-item">
+                <a href="/operation/repay4custom">代扣订单</a>
+            </li>
+        </ul>
+    </div>
+</li>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-10">
+    <div class="row">
+        <input type="text" class="input col-md-4" id="query_str" placeholder="手机号/姓名/身份证/订单号">
+        <a href="#" id="query_user" class="btn btn-default" role="button">查询</a>
+    </div>
+    <div id="query_result">
+        
+    </div>
+</div>
+{%endblock%}

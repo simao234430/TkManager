@@ -1,0 +1,33 @@
+{% load num_compute %}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            {% block modal_title %}
+                <h4 class="modal-title" id="ModalLabel">罚金减免</h4>
+            {% endblock %}
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <form class="form-horizontal">
+                        <p class="formfield">
+                            <label for="reduction_amount">减免金额(最多可以减免{{max_reduction}})</label>
+                            <input type="text" style="width:25%" clanss="form-control" id="reduction_amount" placeholder="当前减免金额{{installment.reduction_amount | math_div}}">
+                        </p>
+                        <p class="formfield">
+                            <label for="reduction_reason" style="vertical-align: top;">减免原因</label>
+                            <textarea class="form-control"  style="width:70%" rows="3" id="reduction_reason" placeholder="减免原因"></textarea>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            {% block modal_footer %}
+            <button type="button" data-loading-text="处理中" id="submit_reduction" token="{{token}}" aid="{{apply.id}}" class="btn btn-primary">确认</button>
+            <button type="button" class="btn btn-default" id="cancel_reduction">取消</button>
+            {% endblock %}
+        </div>
+    </div>
+</div>

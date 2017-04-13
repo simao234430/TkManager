@@ -1,0 +1,110 @@
+{%extends "base.html"%}
+
+{%block title%}代付{%endblock%}
+
+{%block css%}
+    <link type="text/css" rel="stylesheet" href="/static/style/daterangepicker-bs3.css"/>
+{%endblock%}
+{%block js%}
+    <script type="text/javascript" src="/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker.js"></script>
+    <script type="text/javascript" src="/static/js/waiting-dialog.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.fileDownload.js"></script>
+{%endblock%}
+{%block nav_operation%}
+        <li role="presentation" class="active">
+            <a href="/operation">运营管理</a>
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-info"> <a href="pay">代付订单</a> </li>
+                    <li class="list-group-item"> <a href="repay">代扣订单</a> </li>
+                    <li class="list-group-item"> <a href="table1">资金明细</a> </li>
+                    <li class="list-group-item"> <a href="table3">未还明细</a> </li>
+                    <!--
+                    <li class="list-group-item"> <a href="advance">提前还款</a> </li>
+                    -->
+                </ul>
+            </div>
+        </li>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-4">
+        <input type="text" class="form-control"  id="query_str" placeholder="手机号/姓名/身份证/订单号" >
+</div>
+<div class="col-md-2">
+        <select id="query_type">
+          <option value="none">无查询条件</option>
+          <option value="name">姓名</option>
+          <option value="id">身份证号码</option>
+          <option value="phone">手机号码</option>
+          <option value="order">订单号</option>
+        </select>
+        <a href="#" id="query_pay_apply" class="btn btn-default" role="button">查询</a>
+</div>
+<div class="col-md-10">
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='timeBox' name='all'>
+        <a href="#" name="all" class="btn btn-primary" role="button">所有</a>
+        <a href="#" name="today"    class="btn btn-default" role="button">今天</a>
+        <a href="#" name="yestoday" class="btn btn-default" role="button">昨天</a>
+        <a href="#" name="toweek"   class="btn btn-default" role="button">本周</a>
+        <a href="#" name="tomonth"  class="btn btn-default" role="button">本月</a>
+        <a href="#" name="custom"   class="btn btn-default" role="button">自定义时间</a>
+    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='statusBox' name='all'>
+        <a href="#" name="all" class="btn btn-primary" role="button">所有</a>
+        <a href="#" name="waiting" class="btn btn-default" role="button">待处理</a>
+        <a href="#" name="prepayed" class="btn btn-default" role="button">等待放款</a>
+        <a href="#" name="success" class="btn btn-default" role="button">打款成功</a>
+        <a href="#" name="failed" class="btn btn-default" role="button">打款失败</a>
+        <a href="#" name="mifan_failed" class="btn btn-default" role="button">请款失败</a>
+    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='channelBox' name='mifan'>
+        <a href="#" name="mifan" class="btn btn-primary" role="button">米饭</a>
+        <a href="#" name="xintuo" class="btn btn-default" role="button">信托</a>
+    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." >
+        订单期限类型
+        <select id="query_strategy_type">
+          <option value="0">所有期限</option>
+          <option value="10">21天</option>
+          <option value="11">28天</option>
+          <option value="15">学生三个月</option>
+        </select>
+    </div>
+    <div class='boxA' id='orderTable'>
+        <table cellpadding="0" cellspacing="0" border="0" class="display" width="100%" id="pay_loan">
+            <thead>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </tfoot>
+        </table>
+        <div class="clear"></div>
+        <div class="btn-toolbar" role="toolbar" aria-label="..." id='payBox'>
+            <a href="#" id="export_pay_loan" class="btn btn-primary " role="button">导出名单</a>
+            <!--
+            <a href="#" id="do_pay_loan" class="btn btn-primary " role="button">银联代付</a>
+            <a href="#" id="comfirm_pay_loan_success" class="btn btn-primary " role="button">确认打款成功</a>
+            -->
+            <a href="#" id="do_pay_done" class="btn btn-primary " role="button">确认打款</a>
+            <a href="#" id="mifan_confirm" class="btn btn-primary " role="button">米饭打款</a>
+            <a href="#" id="mifan_account_confirm" class="btn btn-primary " role="button">米饭到款查询</a>
+            <a href="#" id="export_pay_loan_table" class="btn btn-primary " role="button">导出报表</a>
+        </div>
+        <div class="modal fade bs-example-modal" id="pay_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="clear"></div>
+    </div>
+</div>
+{%endblock%}

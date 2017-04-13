@@ -1,0 +1,82 @@
+{%extends "base.html"%}
+
+{%block title%}我的审批{%endblock%}
+
+{%block css%}
+    <link type="text/css" rel="stylesheet" href="/static/style/daterangepicker-bs3.css"/>
+{%endblock%}
+{%block js%}
+    <script type="text/javascript" src="/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker.js"></script>
+    <script type="text/javascript" src="/static/js/waiting-dialog.js"></script>
+{%endblock%}
+
+{%block nav_review%}
+    <li role="presentation" class="active">
+        <a href="/review">审批管理</a>
+        <div>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-info"> <a href="mine">我的审批</a> </li>
+                <li class="list-group-item"> <a href="all">所有审批</a> </li>
+            </ul>
+        </div>
+    </li>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-10">
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='reviewBox'>
+        <a href="#" id="start_review" name="offline" class="btn btn-primary center-block" role="button">开始审批</a>
+    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='statusBox' name='waiting'>
+        <a href="#" name="waiting"    class="btn btn-primary" role="button">待审批</a>
+        <a href="#" name="back"   class="btn btn-default" role="button">返回修改</a>
+        <a href="#" name="passed" class="btn btn-default" role="button">已通过</a>
+        <a href="#" name="rejected" class="btn btn-default" role="button">已拒绝</a>
+        <a href="#" name="all"   class="btn btn-default" role="button">全部</a>
+    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='ownerBox' name='all'>
+        <a href="#" name="all"   class="btn btn-primary" role="button">全部</a>
+        <a href="#" name="mine"   class="btn btn-default" role="button">我的</a>
+    </div>
+    <br/>
+
+    <div class='boxA' id='myReviewTable'>
+        <table cellpadding="0" cellspacing="0" border="0" class="display review_table" width="100%" id="my_review">
+            <thead>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <!--
+            <tfoot>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </tfoot>
+            -->
+        </table>
+        <div class="clear"></div>
+    </div>
+
+    <div class="modal fade bs-example-modal-lg" id="review_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade bs-example-modal" id="review_confirm_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="clear"></div>
+    <!-- Button trigger modal -->
+
+<!--
+    <button type="button" id="test_review" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#review_modal">
+      Launch demo modal
+    </button>
+-->
+
+    <!-- Modal -->
+</div>
+</div>
+{%endblock%}

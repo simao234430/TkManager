@@ -1,0 +1,54 @@
+{%extends "base.html"%}
+
+{%block title%}打款申请{%endblock%}
+
+{%block nav%}
+<div class="col-md-2">
+    <ul class="nav nav-pills nav-stacked">
+        <li role="presentation"> <a href="/order">订单管理</a> </li>
+        <li role="presentation"> <a href="/review">审批管理</a> </li>
+        <li role="presentation"><a href="/collection">催收管理</a></li>
+        <li role="presentation"><a href="/audit">审计管理</a></li>
+        <li role="presentation">
+            <a href="/operation" class="active">运营管理</a>
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item"> <a href="loan">打款申请</a> </li>
+                    <li class="list-group-item list-group-item-info"> <a href="advance">提前还款</a> </li>
+                </ul>
+            </div>
+        <li role="presentation disabled"><a href="/admin/review/employee">员工管理</a></li>
+    </ul>
+</div>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-10">
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='timeBox' name='all'>
+        <a href="#" name="all" class="btn btn-primary" role="button">所有</a>
+        <a href="#" name="payed" class="btn btn-default" role="button">待打款</a>
+        <a href="#" name="prepayed" class="btn btn-default" role="button">以打款</a>
+    </div>
+    <div class='boxA' id='orderTable'>
+        <table cellpadding="0" cellspacing="0" border="0" class="display review_table" width="100%" id="all_loan">
+            <thead>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </tfoot>
+        </table>
+        <div class="clear"></div>
+    </div>
+</div>
+{%endblock%}

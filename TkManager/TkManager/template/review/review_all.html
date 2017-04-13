@@ -1,0 +1,92 @@
+{%extends "base.html"%}
+
+{%block css%}
+    <link type="text/css" rel="stylesheet" href="/static/style/daterangepicker-bs3.css"/>
+{%endblock%}
+{%block js%}
+    <script type="text/javascript" src="/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.fileDownload.js"></script>
+    <script type="text/javascript" src="/static/js/waiting-dialog.js"></script>
+{%endblock%}
+
+{%block title%}所有审批{%endblock%}
+
+{%block nav_review%}
+        <li role="presentation" class="active">
+            <a href="/review">审批管理</a>
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item"> <a href="mine">我的审批</a> </li>
+                    <li class="list-group-item list-group-item-info"> <a href="all">所有审批</a> </li>
+                </ul>
+            </div>
+        </li>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-10">
+    <br/>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='timeBox' name='twodays'>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                时间排序 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="timeFilterBox" name="apply">
+                <li><a href="#" name="apply">按提交时间</a></li>
+                <li><a href="#" name="review">按审批时间</a></li>
+            </ul>
+        </div>
+        <a href="#" name="twodays"    class="btn btn-primary" role="button">近两天</a>
+        <a href="#" name="today"    class="btn btn-default" role="button">今天</a>
+        <a href="#" name="yestoday" class="btn btn-default" role="button">昨天</a>
+        <a href="#" name="toweek"   class="btn btn-default" role="button">本周</a>
+        <a href="#" name="tomonth"  class="btn btn-default" role="button">本月</a>
+        <a href="#" name="custom"   class="btn btn-default" role="button">自定义时间</a>
+    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='statusBox' name='waiting'>
+        <a href="#" name="waiting"    class="btn btn-primary" role="button">待审批</a>
+        <a href="#" name="back"   class="btn btn-default" role="button">返回修改</a>
+        <a href="#" name="passed" class="btn btn-default" role="button">已通过</a>
+        <a href="#" name="rejected" class="btn btn-default" role="button">已拒绝</a>
+        <a href="#" name="mrejected" class="btn btn-default" role="button">机器拒绝</a>
+        <a href="#" name="all"   class="btn btn-default" role="button">全部</a>
+    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='typeBox' name='basic'>
+        <a href="#" name="basic"    class="btn btn-primary" role="button">基本信息</a>
+        <a href="#" name="promotion"   class="btn btn-default" role="button">额度提升</a>
+        <a href="#" name="second" class="btn btn-default" role="button">二次提现</a>
+        <a href="#" name="loan"   class="btn btn-default" role="button">提现</a>
+        <a href="#" name="all"   class="btn btn-default" role="button">全部</a>
+    </div>
+    <br/>
+    <div class="clear"></div>
+    <div class='boxA' id='orderTable'>
+        <table cellpadding="0" cellspacing="0" border="0" class="display review_table" width="100%" id="all_review">
+            <thead>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </tfoot>
+        </table>
+        <div class="clear"></div>
+    </div>
+
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='payBox'>
+        <a href="#" id="export_review_1" class="btn btn-primary " role="button">审批效率统计表</a>
+        <a href="#" id="export_review_2" class="btn btn-primary " role="button">BI周报统计表</a>
+    </div>
+    <div class="modal fade bs-example-modal-lg" id="review_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
+{%endblock%}

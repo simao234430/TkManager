@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">用户查询结果列表</h3>
+            </div>
+            <div class="box-body table-responsive">
+                <table id="user_list" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>用户ID</th>
+                            <th>姓名</th>
+                            <th>手机号</th>
+                            <th>身份证号</th>
+                            <th>用户详情</th>
+                    <!--         <th>短信</th>-->
+                           <!-- <th>备注</th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_info in user_list %}
+                        <tr>
+                            <td>{{user_info.id}} {% ifequal user_info.is_register -1 %}(已注销){% endifequal %}</td>
+                            <td>{{user_info.name}}</td>
+                            <td>{{user_info.phone_no}}</td>
+                            <td>{{user_info.id_no}}</td>
+                            <td><a class='query_user_detail' name='{{user_info.id}}' href='#'>查询用户详情</a></td>
+                            <!--<td><a class="btn btn-primary btn" data-toggle="modal" data-target="#myModal">短信</a></td>-->
+                            <!--<td><a  data-user-id={{user_info.id}}  id = "add_remarK" class="btn btn-primary btn" data-toggle="modal" data-target="#add_remark_Modal">备注</a></td>
+                            -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">短信内容</h4>
+      </div>
+      <div class="modal-body">
+       123
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="user_detail">
+
+</div>

@@ -1,0 +1,81 @@
+{%extends "base.html"%}
+
+{%block title%}我的催收{%endblock%}
+
+{%block css%}
+    <link type="text/css" rel="stylesheet" href="/static/style/daterangepicker-bs3.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/style/fileinput.min.css" media="all"/>
+{%endblock%}
+{%block js%}
+    <script type="text/javascript" src="/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.fileDownload.js"></script>
+    <script type="text/javascript" src="/static/js/waiting-dialog.js"></script>
+    <script type="text/javascript" src="/static/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="/static/js/fileinput_locale_zh.js"></script>
+{%endblock%}
+
+{%block nav_collection%}
+        <li role="presentation" class="active">
+            <a href="/review">催收管理</a>
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-info"> <a href="mine">我的催收</a> </li>
+                    <li class="list-group-item"> <a href="all">所有催收</a> </li>
+                </ul>
+            </div>
+        </li>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-10">
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='timeBox' name='all'>
+        <a href="#" name="all"      class="btn btn-primary" role="button">所有</a>
+        <a href="#" name="today"    class="btn btn-default" role="button">今天</a>
+        <a href="#" name="yestoday" class="btn btn-default" role="button">昨天</a>
+        <a href="#" name="toweek"   class="btn btn-default" role="button">本周</a>
+        <a href="#" name="tomonth"  class="btn btn-default" role="button">本月</a>
+        <a href="#" name="custom"   class="btn btn-default" role="button">自定义时间</a>
+    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='typeBox' name='m1'>
+        <a href="#" name="m0"  class="btn btn-default" role="button">M0</a>
+        <a href="#" name="m1"  class="btn btn-primary" role="button">M1</a>
+        <a href="#" name="m2"  class="btn btn-default" role="button">M2</a>
+        <a href="#" name="m3"  class="btn btn-default" role="button">M3</a>
+        <a href="#" name="m4"  class="btn btn-default" role="button">委外</a>
+        <a href="#" name="all" class="btn btn-default" role="button">所有</a>
+    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='statusBox' name='processing'>
+        <a href="#" name="processing" class="btn btn-primary" role="button">处理中</a>
+        <a href="#" name="done" class="btn btn-default" role="button">已完成</a>
+        <a href="#" name="all" class="btn btn-default" role="button">所有</a>
+    </div>
+    <!--联系人状态-->
+    <br/>
+    <div class="clear"></div>
+    <div class='boxA' id='orderTable'>
+        <table cellpadding="0" cellspacing="0" border="0" class="display review_table" width="100%" id="my_collection">
+            <thead>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </tfoot>
+        </table>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    <div class="modal fade bs-example-modal-lg" id="collection_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade bs-example-modal-lg" id="dispatch_collection_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
+{%endblock%}

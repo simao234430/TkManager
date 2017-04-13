@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>{%block title%}{%endblock%}</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <meta content="no-cache" http-equiv="Pragma"/>
+
+    <!--TODO: change them to cdn -->
+<!--
+    <link type="text/css" rel="stylesheet" href="/static/style/bootstrap.min.css"/>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+-->
+    <link rel="stylesheet" href="/static/style/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/style/jquery.dataTables.min.css "/>
+    <link type="text/css" rel="stylesheet" href="/static/style/row_detail.css "/>
+    <!--using in develop enviroment -->
+    <link type="text/css" rel="stylesheet/less" href="/static/style/styles.less" />
+    <link type="text/css" rel="stylesheet" href="/static/style/daterangepicker.css"/>
+    {%block css%}{%endblock%}
+    <script type="text/javascript" src="/static/js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+
+
+    <!--
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    -->
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker.js"></script>
+
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+-->
+    <script type="text/javascript" src="/static/js/jquery.dataTables.js"></script>
+    <!--using in develop enviroment -->
+    <script src="/static/js/less-1.7.1.min.js"></script>
+    {%block js%}{%endblock%}
+    <script type="text/javascript" src="/static/js/main.js"></script>
+</head>
+
+<body>
+<div id="background" class="container">
+    <div class="row">
+        <div class="col-md-3 h2">
+            TKManager
+        </div>
+        <div class="col-md-3 col-md-offset-6 h4 " id='top_right_tools' user_id={{user.id}}>
+            <a href='/accounts/change_password'>{{user.username}}</a>
+            <a href='/admin'>管理</a>
+            <a href='/help'>帮助</a>
+            <a href='/accounts/logged_out'>退出</a>
+        </div>
+    </div>
+    <hr size="2" color="#ff9966" style="filter:alpha(opacity=10,finishopacity=100,style=1,startX=0,startY=0,finishX=100,finishY=100);width:490;"/>
+    <div class="row">
+        {%block header%}{%endblock%}
+    </div>
+    <div class="row">
+        {%block topnav%}{%endblock%}
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="nav nav-pills nav-stacked">
+                {%block nav_order%}
+                <li role="presentation"> <a href="/order">订单管理</a> </li>
+                {%endblock%}
+                {%block nav_review%}
+                <li role="presentation"> <a href="/review">审批管理</a> </li>
+                {%endblock%}
+                {%block nav_operation%}
+                <li role="presentation"> <a href="/operation">运营管理</a></li>
+                {%endblock%}
+                {%block nav_collection%}
+                <li role="presentation"> <a href="/collection">催收管理</a></li>
+                {%endblock%}
+                {%block nav_customservice%}
+                <li role="presentation"> <a href="/custom">客服中心</a></li>
+                {%endblock%}
+                {%block nav_audit%}
+                <li role="presentation"> <a href="/audit">财务管理</a></li>
+                {%endblock%}
+                {%block nav_emplyee%}
+                <li role="presentation"> <a href="/admin/review/employee">员工管理</a></li>
+                {%endblock%}
+            </ul>
+        </div>
+        {%block content%}{%endblock%}
+    </div>
+    <div class="clear"></div>
+    <div class="row" id="footer"> Tk Financial inc. copyright reseverd.  Powered by Django 1.7 <a href="/feedback">反馈</a> </div>
+</div>
+</body>
+</html>

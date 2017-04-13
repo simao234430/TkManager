@@ -1,0 +1,33 @@
+{% extends "base_modal.html" %}
+
+{% block header %}
+    <h4 class="modal-title" id="ModalLabel" name={{apply.id}}>催收信息</h4>
+{% endblock %}
+
+{% block overdue%}
+{% if overdue %}
+<div class="row">
+    <div class="col-md-12">
+
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block repay%}
+{% if repays%}
+<div class="row">
+    <div class="col-md-12">
+        {% for repay in repays %}
+
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+    </div>
+{% endblock %}

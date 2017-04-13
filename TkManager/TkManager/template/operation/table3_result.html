@@ -1,0 +1,46 @@
+{% load num_compute %}
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="ModalLabel">逾期报表</h4>
+    </div>
+    <div class="modal-body">
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-14">
+                <div class="panel panel-default">
+                    <div width= "90%"class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class='boxA' id='orderTable'>
+                                <table class="table-responsive table" id="pay_loan_mifan_account" width="80%">
+            <thead>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+                <tr>
+                    {%for column in result_columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+                                </table>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+    </div>
+  </div>
+</div>

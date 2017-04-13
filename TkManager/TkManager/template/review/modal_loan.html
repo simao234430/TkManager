@@ -1,0 +1,74 @@
+{% extends "base_modal.html" %}
+
+{% block header %}
+    <h4 class="modal-title" id="ModalLabel" name={{apply.id}}>提现审批</h4>
+{% endblock %}
+
+{% block bank %}
+{% endblock %}
+{% block callrecord %}
+{% endblock %}
+
+{% block loan %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading bg-info">贷款记录</div>
+            <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-body table-responsive" id="user_info" value="{{apply.create_by.id}}">
+                            <table id="loan_table" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>单期详情</th>
+                                        <th>订单号</th>
+                                        <th>申请金额</th>
+                                        <th>实际打款金额</th>
+                                        <th>还款状态</th>
+                                        <th>申请时间</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="text-center h3">
+                        {{ collection_check|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block total %}
+<div class="row">
+    <div class="col-md-offset-8 col-md-3 review_right_panel" name="total_area" id="total_area_section">
+        <div class="panel panel-default">
+            <div class="panel-heading bg-info">二次贷款信息审核 </div>
+            <div class="panel-body">
+                <div class="input-group">
+                    <input type="radio" class="pass_radio" name="total_area" id="total_area_pass" value="y" checked>
+                    通过
+                </div>
+                <div class="input-group">
+                    <input type="radio" class="reject_radio" name="total_area" id="total_area_reject" value="n">
+                    拒绝
+                    <br/>
+                    <textarea id="total_area_notes" placeholder="审批备注..." class="notes_area" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="modal-footer">
+    <button type="submit button" id="submit_loan" apply_id="{{apply.id}}" class="btn btn-primary">提交</button>
+    <button type="button" class="btn btn-default cancel-btn" data-dismiss="modal">取消</button>
+</div>
+{% endblock %}
+

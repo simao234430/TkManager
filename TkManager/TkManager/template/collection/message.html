@@ -1,0 +1,38 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            {% block modal_title %}
+                <h4 class="modal-title" id="ModalLabel">短信发送</h4>
+            {% endblock %}
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <button type="button" phone={{applyer.phone_no}} class="btn btn-primary message-phone">{{applyer.name}}(本人)</button>
+                    {% for contact in contacts %}
+                    <button type="button" phone={{contact.phone_no}} class="btn btn-default message-phone">{{contact.name}}({{contact.get_relationship_display}})</button>
+                    {% endfor %}
+                </div>
+                <br/>
+                <div class="row">
+                    <form class="form-horizontal">
+                        <p class="formfield">
+                            <label for="phone_no_to_send">电话号码</label>
+                            <input type="text" style="width:45%" class="form-control" id="phone_no_to_send" value="{{applyer.phone_no}}">
+                        </p>
+                        <p class="formfield">
+                            <label for="content_to_send" style="vertical-align: top;">短信内容</label>
+                            <textarea class="form-control"  style="width:45%" rows="6" id="content_to_send" placeholder="短信内容"></textarea>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            {% block modal_footer %}
+            <button type="button" data-loading-text="处理中" id="submit_message" token="{{token}}" aid="{{apply.id}}" class="btn btn-primary">发送</button>
+            <button type="button" class="btn btn-default" id="cancel_message">取消</button>
+            {% endblock %}
+        </div>
+    </div>
+</div>

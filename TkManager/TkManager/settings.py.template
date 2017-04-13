@@ -1,0 +1,245 @@
+"""
+Django settings for TkManager project.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/1.7/topics/settings/
+
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/1.7/ref/settings/
+"""
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = '3564e^zg%sj9&o2v27)iw7r@8)pa8ozg@z-n72$$$h-khdy_pc'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+#DEBUG = False
+
+TEMPLATE_DEBUG = True
+
+USE_DATA_SERVER = True
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+
+# Application definition
+
+INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    #'django_extensions',
+    'django_gearman_commands',
+    'TkManager.order',
+    'TkManager.review',
+    'TkManager.collection',
+    'TkManager.custom',
+    'TkManager.audit',
+    'TkManager.juxinli',
+    #'debug_toolbar',
+)
+
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+ROOT_URLCONF = 'TkManager.urls'
+
+WSGI_APPLICATION = 'TkManager.wsgi.application'
+
+
+# Database
+# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        #'', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'tk_test',
+        'USER': 'tk_test',
+        'PASSWORD': 'tktest',
+        'HOST': 'rdsxf1ekwvspuq5myl2rp.mysql.rds.aliyuncs.com',
+    }
+}
+
+REDIS = {
+    "HOST" : "121.40.208.254",
+    "PORT" : 6379,
+    "AUTH" : "",
+}
+
+MONGO = {
+        "HOST": "121.43.146.31",
+        "USER": "",
+        "DB": "",
+        "PORT": 27017,
+        "AUTH": "",
+}
+
+MESSAGE_SERVER = {
+    "HOST" : "10.168.254.64",
+    "PORT" : 9090,
+    "DEBUG" : True,
+}
+
+BANK_SERVER = {
+    "HOST" : "10.168.254.64",
+    "PORT" : 9091,
+    "DEBUG" : True,
+}
+
+BIND_SERVER = {
+    "HOST" : "10.168.254.64",
+    "PORT" : 9092,
+}
+
+RISK_SERVER = {
+    "HOST" : "10.168.254.64",
+    "PORT" : 9093,
+}
+
+IP_SERVER = {
+    "HOST" : "10.168.254.64",
+    "PORT" : 9094,
+}
+
+LOG_SERVER = {
+    "LOG_NAME": "tk_manager",
+    "LOG_FILE": "tk_manager.log",
+    "HOST" : "10.168.254.64",
+    "PORT" : 9096,
+}
+
+RC_SERVER = {
+    "HOST" : "10.168.254.64",
+    "PORT" : 9095,
+}
+
+DATA_SERVER = {
+    "ORG_NAME" : "hualahuala_yufa",
+    "URL" : "http://121.40.167.184:8888/query"
+}
+#using R or not
+#USING_R = 1
+
+# Internationalization
+# https://docs.djangoproject.com/en/1.7/topics/i18n/
+
+LANGUAGE_CODE = 'zh_CN'
+
+TIME_ZONE = 'Asia/Shanghai'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = False
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.7/howto/static-files/
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+#    os.path.join(os.path.dirname(__file__),'static/').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__),'static/').replace('\\','/'),
+)
+
+# List of callables that know how to import templates from various sources.
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+    #'django.template.loaders.eggs.Loader',
+)
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(os.path.dirname(__file__),'template').replace('\\','/'),
+)
+
+
+TEMPLATE_CONTEXT_PROCESSORS =(
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    )
+
+#AUTH_USER_MODEL = 'TkManager.review.Employee'
+LOGIN_REDIRECT_URL = '/'
+
+#OSS_URL = 'http://tk-pic.oss-cn-hangzhou.aliyuncs.com/'
+OSS_URL = 'http://tktest.oss-cn-hangzhou.aliyuncs.com/'
+
+GEARMAN_SERVERS = ['127.0.0.1:4730']
+
+JUXINLI_CONF =  {
+    'org_name' : 'taikangjinrong',
+    'client_secret' : '4ade042f9af2471d93268baed949a5e2',
+    'access_report_data_api' : 'https://www.juxinli.com/api/access_report_data',
+    'access_raw_data_api' : 'https://www.juxinli.com/api/access_raw_data',
+    'access_report_token_api' : 'https://www.juxinli.com/api/access_report_token',
+    'access_e_business_raw_data_api' : 'https://www.juxinli.com/api/access_e_business_raw_data',
+}
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
+IMPORT_FILE = ["import_data/3.xls"]#, "import_data/2.xls", "import_data/3.xls", "import_data/4.xls"]
+
+# formal key
+#CORPID = "MFG21b6sh4lFFIZC2j"
+#TOKEN = "dzK5klI"
+#ENCODINGAESKEY =  "zTKo235dYP2qOdqdEPKoDhlJxuuoLrXsEqbXNutHAWN"
+
+# test key
+TOKEN = "MyqcUA4"
+ENCODINGAESKEY = "KWB3nDfmaXGqGPla3NMZ2eQzEDS0hJK5wLaeHH7ns0O"
+CORPID = "test1XShXc8YkpO2yN"
+
+#mifan test url:
+#MIFAN_URL = "api.testmilijinfu.com"
+#mifan formal url:
+#MIFAN_URL = "api.milijinfu.com"
+
+# init log
+from TkManager.common.tk_log_client import TkLog
+import logging
+
+host = LOG_SERVER["HOST"]
+port = LOG_SERVER["PORT"]
+name = LOG_SERVER["LOG_NAME"]
+filename = LOG_SERVER["LOG_FILE"]
+TkLog().init_log_include_local_file(name, "DEBUG", host, port, filename, 1024)
+TkLog().info("init settings done.")
+
+PUSH_SERVER = {"HOST": 127.0.0.1,
+               "PORT": 9100
+}

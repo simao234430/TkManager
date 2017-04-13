@@ -1,0 +1,57 @@
+{% extends "base_modal.html" %}
+{% load num_compute %}
+
+{% block header %}
+      <h4 class="modal-title" id="ModalLabel">信息审批（额度提升:{{apply.get_type_display}}）</h4>
+{% endblock %}
+
+<!-- 只要id部分 -->
+{% block family %}
+{% endblock %}
+
+{% block q_pic_hand%}
+{% endblock %}
+{% block o_pick_back%}
+{% endblock %}
+{% block pic_front %}
+{% endblock %}
+{% block chsi %}
+{% endblock %}
+{% block bank %}
+{% endblock %}
+{% block action %}
+{% endblock %}
+
+{% block promote %}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">{{apply.get_type_display}}</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% for pic in pics %}
+                                    <img class="img-responsive" src="{{oss_url}}/{{pic}}"></img>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 review_right_panel" name="promotion_area">
+                <div class="input-group">
+                    {% if apply.money %}
+                        通过额度: {{apply.money | math_div}}
+                    {% else %}
+                        通过额度: {{review.money}}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block footer %}
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+    </div>
+{% endblock %}

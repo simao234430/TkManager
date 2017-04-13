@@ -1,0 +1,66 @@
+{% load num_compute %}
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="ModalLabel">代付确认</h4>
+    </div>
+    <div class="modal-body">
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">用户借贷信息</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table-responsive table">
+                                    <tr>
+                                        <th>姓名</th>
+                                        <th>{{payment.user.name}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>手机号</th>
+                                        <th>{{payment.user.phone_no}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>身份证号</th>
+                                        <th>{{payment.user.id_no}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>本金金额</th>
+                                        <th>{{payment.apply_amount | math_div}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>打款金额</th>
+                                        <th>{{payment.exact_amount | math_div}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>贷款方式</th>
+                                        <th>{{payment.get_strategy_id_display}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>银行卡号</th>
+                                        <th>{{bank_card.number}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>银行名称</th>
+                                        <th>{{bank_card.get_bank_type_display}}</th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" data-loading-text="处理中" id="submit_payment" aid="{{apply.id}}" class="btn btn-primary">银联代付</button>
+        <button type="button" data-loading-text="处理中" id="submit_payment_success" aid="{{apply.id}}" class="btn btn-primary">确认打款已成功</button>
+        <button type="button" data-loading-text="处理中" id="submit_payment_failed" aid="{{apply.id}}" class="btn btn-primary">确认打款已失败</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+{%extends "base.html"%}
+
+{%block title%}订单管理{%endblock%}
+
+{%block nav_order%}
+        <li role="presentation" class="active">
+            <a href="/order">订单管理</a>
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-info"> <a href="/order/all">所有订单</a> </li>
+                    <li class="list-group-item"> <a href="/order/apply">基本信息</a> </li>
+                    <li class="list-group-item"> <a href="/order/promotion">额度提升</a> </li>
+                    <li class="list-group-item"> <a href="/order/loan">贷款审核</a> </li>
+                    <li class="list-group-item"> <a href="/order/collection">催收订单</a> </li>
+                    <li class="list-group-item disabled"> <a href="/order/trendsinsight">趋势分析</a> </li>
+                </ul>
+            </div>
+        </li>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-10">
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='timeBox' name='today'>
+        <a href="#" name="today"    class="btn btn-primary" role="button">今天</a>
+        <a href="#" name="yestoday" class="btn btn-default" role="button">昨天</a>
+        <a href="#" name="toweek"   class="btn btn-default" role="button">本周</a>
+        <a href="#" name="tomonth"  class="btn btn-default" role="button">本月</a>
+        <a href="#" id='custome_time_picker' name="custom"   class="btn btn-default" role="button">自定义时间</a>
+    </div>
+    <div class='boxA' id='orderTable'>
+        <table cellpadding="0" cellspacing="0" border="0" class="display" width="100%" id="all_order">
+            <thead>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </tfoot>
+        </table>
+        <div class="clear"></div>
+    </div>
+    <button type="button" class="btn btn-default" id='gen_order'>生成基本信息审核</button>
+    <button type="button" class="btn btn-default" id='gen_promotion'>生成额度提升审核</button>
+    <button type="button" class="btn btn-default" id='gen_loan'>生成提现申请</button>
+    <input type="text" class="form-inline" id="delete_user_input" placeholder="用户手机号">
+    <button type="button" class="btn btn-default" id='delete_user'>删除用户</button>
+    <input type="text" class="form-inline" id="repay_repayment_input" placeholder="贷款订单号">
+    <button type="button" class="btn btn-default" id='repay_repayment'>还清贷款</button>
+
+<!--
+    <form method="post" action="update.do?method=uploader" enctype="multipart/form-data">
+        <p><input type="file" id="file1" name="file" /></p>
+        <input type="button" id="upload_file" value="文件上传测试" />
+        <p><img id="img1" alt="上传成功啦" src="" /></p>
+    </form>
+    <form method="post" action="" enctype="multipart/form-data">
+        <label>File Input: <input type="file" name="file" id="demo1" /></label>
+        <div id="uploads">
+        </div>
+    </form>
+-->
+</div>
+{%endblock%}

@@ -1,0 +1,69 @@
+{%extends "base.html"%}
+
+{%block title%}财务管理{%endblock%}
+
+{%block css%}
+    <link type="text/css" rel="stylesheet" href="/static/style/daterangepicker-bs3.css"/>
+{%endblock%}
+{%block js%}
+    <script type="text/javascript" src="/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.fileDownload.js"></script>
+    <script type="text/javascript" src="/static/js/waiting-dialog.js"></script>
+{%endblock%}
+
+{%block nav_audit%}
+    <li role="presentation" class="active">
+        <a href="/audit">财务管理</a>
+        <div>
+            <ul class="list-group">
+                <li class="list-group-item"> <a href="check">订单复核</a> </li>
+                <li class="list-group-item list-group-item-info"> <a href="receivables">应收账单</a> </li>
+                <li class="list-group-item"> <a href="received">应收账单</a> </li>
+            </ul>
+        </div>
+    </li>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-10">
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='timeBox' name='all'>
+        <a href="#" name="all"      class="btn btn-primary" role="button">所有</a>
+        <a href="#" name="today"    class="btn btn-default" role="button">今天</a>
+        <a href="#" name="yestoday" class="btn btn-default" role="button">昨天</a>
+        <a href="#" name="toweek"   class="btn btn-default" role="button">本周</a>
+        <a href="#" name="tomonth"  class="btn btn-default" role="button">本月</a>
+        <a href="#" name="custom"   class="btn btn-default" role="button">自定义时间</a>
+    </div>
+    <br/>
+    <div class="clear"></div>
+    <div class='boxA' id='orderTable'>
+        <table cellpadding="0" cellspacing="0" border="0" class="display review_table" width="100%" id="check_apply">
+            <thead>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </tfoot>
+        </table>
+        <div class="clear"></div>
+    </div>
+    <!--
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='payBox'>
+        <a href="#" id="export_collection_1" class="btn btn-primary " role="button">业务报表</a>
+    </div>
+    -->
+    <div class="clear"></div>
+    <div class="modal fade bs-example-modal-lg" id="check_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
+{%endblock%}

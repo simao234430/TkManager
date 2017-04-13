@@ -1,0 +1,22 @@
+{%extends "base.html"%}
+
+{%block title%}404{%endblock%}
+
+{%block nav%}
+<div class="col-md-2">
+    <ul class="nav nav-pills nav-stacked">
+        <li role="presentation"> <a href="/order">订单管理</a> </li>
+        <li role="presentation"><a href="../review">审批管理</a></li>
+        <li role="presentation"><a href="../collection">催收管理</a></li>
+        <li role="presentation"><a href="../audit">审计管理</a></li>
+        <li role="presentation"><a href="../marketing">运营管理</a></li>
+        <li role="presentation disabled"><a href="../admin">员工管理</a></li>
+    </ul>
+</div>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-10">
+    <img src="/static/images/404.jpg" class="img-responsive " alt="Responsive image">
+</div>
+{%endblock%}

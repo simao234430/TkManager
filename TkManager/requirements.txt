@@ -1,0 +1,12 @@
+Django==1.7.7
+pycrypto>=2.6.1
+redis>=2.7.2
+pyExcelerator==0.6.4.1
+django-gearman-commands==0.6.1
+MySQL-Python
+gearman==2.0.2
+MySQL-python>=1.2.4b4
+xlrd>=0.9.4
+requests
+#aliyun-oss==0.3. http://www.hualahuala.com/temp/oss_python_sdk_20150413.zip
+#pip install  http://www.hualahuala.com/temp/oss_python_sdk_20150413.zip

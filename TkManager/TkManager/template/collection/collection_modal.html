@@ -1,0 +1,173 @@
+{% extends "operation/repay_modal.html" %}
+{% load num_compute %}
+
+{%block css%}
+    <link type="text/css" rel="stylesheet" href="/static/style/daterangepicker-bs3.css"/>
+{%endblock%}
+{%block js%}
+    <script type="text/javascript" src="/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.fileDownload.js"></script>
+    <script type="text/javascript" src="/static/js/waiting-dialog.js"></script>
+{%endblock%}
+
+{% block modal_title %}
+<h4 class="modal-title" id="ModalLabel">催收</h4>
+{% endblock %}
+
+{% block installment_table %}
+<table class="table-responsive table">
+    <tr class="info">
+        <th>应还本金</th>
+        <th>应还利息</th>
+        <th>应还本息合计</th>
+        <th>逾期滞纳金</th>
+        <th>减免金额</th>
+        <th>应还总额</th>
+        <th>未还金额</th>
+        <th>操作</th>
+    </tr>
+    <tr class="success">
+        <td>{{installment_more.base_amount | math_div}}</td>
+        <td>{{installment_more.base_interest | math_div}}</td>
+        <td>{{installment.should_repay_amount | math_div}}</td>
+        <td>{{installment.repay_overdue | math_div}}</td>
+        <td id="reduction_column">{{installment.reduction_amount | math_div}}</td>
+        <td>{{installment_more.repay_all | math_div}}</td>
+        <td id="rest_column">{{installment_more.rest_repay_amount | math_div}}</td>
+        <td> <a id="do_reduction" href="#">减免</a> </td>
+    </tr>
+</table>
+{% endblock %}
+
+{% block modal_contact_info %}
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading bg-info">联系人</div>
+            <div class="panel-body">
+                <div class="row">
+                     <table class="table-responsive table table-striped">
+                         <tr>
+                             <th>关系</th>
+                             <th>姓名</th>
+                             <th>电话</th>
+                         </tr>
+                         {% for contact in contacts %}
+                         <tr>
+                             <th>{{contact.get_relationship_display}}</th>
+                             <th>{{contact.name}}</th>
+                             <th>{{contact.phone_no}}</th>
+                         </tr>
+                         {%endfor%}
+                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block review_info %}
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading bg-info">催记</div>
+            <div class="panel-body">
+                <div class="row">
+                    <form class="form-horizontal panel-nested-table">
+                        <div class="col-md-6 form-group" id="repay_type_radio">
+                            <label class="control-label">催收对象</label>
+                            <label class="radio-inline">
+                                <input name="repay_type" type="radio" id="collection_to_1" value="0" checked> 本人
+                            </label>
+                            <label class="radio-inline">
+                                <input name="repay_type" type="radio" id="collection_to_2" value="1"> 第三方
+                            </label>
+                            <label class="radio-inline">
+                                <input name="repay_type" type="radio" id="collection_to_3" value="2"> 其他
+                            </label>
+                        </div>
+                        <div class="col-md-6" id="repay_time">
+                            <label class="control-label">承诺还款时间</label>
+                            <input type="text" class="inline" id="config-repay_time" class="form-control">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label for="collection_record" style="vertical-align: top;">处理备注</label>
+                            <textarea class="form-control"  rows="3" id="collection_record" placeholder="请填写催记内容"></textarea>
+                        </div>
+                        <div class="col-md-12 form-group" style="text-align:right" >
+                            <button type="button" data-loading-text="处理中" id="submit_collection_record" token="{{token}}" aid="{{apply.id}}" class="btn btn-primary">添加催记</button>
+                        </div>
+                    </form>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="box-body table-responsive panel-nested-table">
+                        <div class="btn-group">
+                            <button type="button" id="recordTypeButton" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                催记类型 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="recordTypeBox" name="all">
+                                <li><a href="#" name="record">催记</a></li>
+                                <li><a href="#" name="repay">扣款</a></li>
+                                <li><a href="#" name="dispatch">分配</a></li>
+                                <li><a href="#" name="message">短信</a></li>
+                                <li><a href="#" name="all">所有</a></li>
+                            </ul>
+                        </div>
+                        <table id="collection_record_table" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>催记类型</th>
+                                    <th>处理人</th>
+                                    <th>处理时间</th>
+                                    <!--
+                                    <th>承诺还款时间</th>
+                                    -->
+                                    <th style="width:60%">备注</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block modal_collection_check_label %}
+   <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading bg-info">二次提现意见</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class = "radio panel-nested-table text-center" id="collection_checks">
+                                是否允许二次提现
+                                <label class="radio-inline">
+                                    <input name="collection_check" type="radio"  value="1" {% ifequal collection_check '1' %} checked {% endifequal %}> 是
+                                </label>
+                                <label class="radio-inline">
+                                    <input name="collection_check" type="radio"  value="0"  {% ifequal collection_check '0' %} checked {% endifequal %}> 否
+                                </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block modal_footer %}
+    {% ifequal apply.status 'k' %}
+        <button type="button" class="btn" disabled="disabled">等待复核</button>
+        <input type="hidden" id="submit_repayment" aid="{{apply.id}}"  />
+    {% else %}
+        {% ifequal apply.status '8' %}
+        <input type="hidden" id="submit_repayment" aid="{{apply.id}}"  />
+        {% else %}
+            <button type="button" id="submit_repayment" token="{{token}}" aid="{{apply.id}}" class="btn btn-primary">确认</button>
+        {% endifequal %}
+    {% endifequal %}
+    <button type="button" id="cancel_repayment"  aid="{{apply.id}}" class="btn btn-default" data-dismiss="modal">取消</button>
+{% endblock %}
+
+{% block extra %}
+<div class="modal fade bs-example-modal" id="message_modal" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade bs-example-modal" id="reduction_modal" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+{% endblock %}

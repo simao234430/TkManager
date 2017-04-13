@@ -1,0 +1,18 @@
+{%extends "base_modal.html"%}
+
+{% block header %}
+      <h4 class="modal-title" id="ModalLabel" name={{apply.id}}>信息查看</h4>
+{% endblock %}
+
+{% block footer %}
+    {% if manager %}
+    <div class="modal-leftfooter">
+        <button type="submit button" id="reset_review" apply_id="{{apply.id}}" class="btn btn-primary">重新审批</button>
+    </div>
+    {% endif %}
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+    </div>
+{% endblock %}
+
+

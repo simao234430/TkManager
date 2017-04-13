@@ -1,0 +1,575 @@
+{%extends "base.html"%}
+
+{%block title%}用户查询{%endblock%}
+
+{%block js%}
+    <!-- for test only -->
+{%endblock%}
+
+{%block nav_customservice%}
+        <li role="presentation" class="active">
+            <a href="/custom">客服中心</a>
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-info"> <a href="/custom/user_view">用户查询</a></li>
+                    <li class="list-group-item"> <a href="/custom/record">操作记录</a></li>
+                    <li class="list-group-item"> <a href="/custom/feedback">用户反馈</a> </li>
+                </ul>
+            </div>
+        </li>
+{%endblock%}
+
+{%block content%}
+<div class="row" id="user_info_display">
+    <div class="col-md-8">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">个人信息状态</h3>
+            </div>
+            <div class="box-body table-responsive" id="user_info" value="{{user.id}}">
+                <table class="table table-bordered table-hover">
+                    <tr>
+                        <th>姓名</th>
+                        <th>{{user.name}}</th>
+                    </tr>
+                    <tr>
+                        <th>注册时间</th>
+                        <th>{{user.create_time}}</th>
+                    </tr>
+                    <tr>
+                        <th>个人信息状态</th>
+                        <th>
+                        {{ user_status }}    <a href="#" id="get_user_detail" class="btn btn-default" role="button">展开</a>
+                        </th>
+                    </tr>
+                </table>
+            </div>
+            <div class="box-body" style="display: none;" id="user_info_detail">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading bg-info">用户身份信息</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table-responsive table">
+                                            {% if check_status %}
+                                            <tr>
+                                                <th>机器审批结果</th>
+                                                <th>{{check_status.get_auto_check_status_display}}</th>
+                                            </tr>
+                                            {% endif %}
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>{{user.id}} {% ifequal user.is_register -1 %}(已注销){% endifequal %}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>姓名</th>
+                                                <th>{{user.name}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>手机号</th>
+                                                <th>{{user.phone_no}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>身份证号</th>
+                                                <th>{{user.id_no}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>性别</th>
+                                                <th>{{profile.get_gender_display}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>预期金额</th>
+                                                <th>{{profile.expect_amount}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>渠道来源</th>
+                                                <th>{{user.channel}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>工作类型</th>
+                                                <th>{{profile.get_job_display}}</th>
+                                            </tr>
+                                            {%ifequal profile.job 2%}
+                                            <tr>
+                                                <th>公司名称</th>
+                                                <th>{{profile.company}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>工作地点</th>
+                                                <th>{{profile.work_address}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>工作职位</th>
+                                                <th></th>
+                                            </tr>
+                                            <tr>
+                                                <th>工作电话</th>
+                                                <th>{{profile.company_phone}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>家庭住址</th>
+                                                <th>{{profile.family_address}}</th>
+                                            </tr>
+                                            {%endifequal%}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 review_right_panel" name="id_area">
+                        {% if reviews.id_review %}
+                        <div class="panel panel-default">
+                            {% for r in reviews.id_review%}
+                            <div class="panel-heading bg-info">
+                                {{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}}
+                            </div>
+                            <div class="panel-body">
+                                {%if r.review_note%}
+                                <div class="">审批备注：{{r.review_note}}</div>
+                                {%endif%}
+                            {%if r.review_message%}
+                                <div class="">打回信息： {{r.review_message}}</div>
+                                {%endif%}
+                            {%if r.reviewer.username%}
+                                <div class="reviewer">审批人： {{r.reviewer.username}}</div>
+                                {%endif%}
+                            </div>
+                            {%endfor%}
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading bg-info">用户身份证照片（正面）</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <img class="img-responsive" src="{{oss_url}}/{{idcard.id_pic_front}}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 review_right_panel" name="pic_front_area">
+                        {% if reviews.pic_front_review %}
+                        <div class="panel panel-default">
+                            {% for r in reviews.pic_front_review%}
+                            <div class="panel-heading bg-info">
+                                {{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}}
+                            </div>
+                            <div class="panel-body">
+                                {%if r.review_note%}
+                                <div class="">审批备注：{{r.review_note}}</div>
+                                {%endif%}
+                            {%if r.review_message%}
+                                <div class="">打回信息： {{r.review_message}}</div>
+                                {%endif%}
+                            {%if r.reviewer.username%}
+                                <div class="reviewer">审批人： {{r.reviewer.username}}</div>
+                                {%endif%}
+                            </div>
+                            {%endfor%}
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading bg-info">用户身份证照片（背面）</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <img class="img-responsive" src="{{oss_url}}/{{idcard.id_pic_back}}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 review_right_panel" name="o_pic_back_area">
+                        {% if reviews.pic_back_review %}
+                        <div class="panel panel-default">
+                            {% for r in reviews.pic_back_review%}
+                            <div class="panel-heading bg-info">
+                                {{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}}
+                            </div>
+                            <div class="panel-body">
+                                {%if r.review_note%}
+                                <div class="">审批备注：{{r.review_note}}</div>
+                                {%endif%}
+                            {%if r.review_message%}
+                                <div class="">打回信息： {{r.review_message}}</div>
+                                {%endif%}
+                            {%if r.reviewer.username%}
+                                <div class="reviewer">审批人： {{r.reviewer.username}}</div>
+                                {%endif%}
+                            </div>
+                            {%endfor%}
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading bg-info">用户身份证照片（手持）</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <img class="img-responsive" src="{{oss_url}}/{{idcard.id_pic_self}}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 review_right_panel" name="q_pic_hand_area">
+                        {% if reviews.pic_hand_review %}
+                        <div class="panel panel-default">
+                            {% for r in reviews.pic_hand_review%}
+                            <div class="panel-heading bg-info">
+                                {{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}}
+                            </div>
+                            <div class="panel-body">
+                                {%if r.review_note%}
+                                <div class="">审批备注：{{r.review_note}}</div>
+                                {%endif%}
+                            {%if r.review_message%}
+                                <div class="">打回信息： {{r.review_message}}</div>
+                                {%endif%}
+                            {%if r.reviewer.username%}
+                                <div class="reviewer">审批人： {{r.reviewer.username}}</div>
+                                {%endif%}
+                            </div>
+                            {%endfor%}
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading bg-info">学生学籍信息</div>
+                            <div class="panel-body">
+                                {% for chsi in chsis %}
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <table class="table-responsive table">
+                                            <tr>
+                                                <th>姓名</th>
+                                                <th>
+                                                    {{chsi.chsi_name}}
+                                            {%ifequal chsi.chsi_name user.name%}
+                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                    {%else%}
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                    ({{user.name}})
+                                            {%endifequal%}
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>学校</th>
+                                                <th>{{chsi.school}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>性别</th>
+                                                <th>{{chsi.gender}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>身份证号码</th>
+                                                <th>
+                                                    {{chsi.id_card_number}}
+                                            {%ifequal chsi.id_card_number user.id_no%}
+                                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                                    {%else%}
+                                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                    ({{user.id_no}})
+                                            {%endifequal%}
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>民族</th>
+                                                <th>{{chsi.nation}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>生日</th>
+                                                <th>{{chsi.birthday}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>学历</th>
+                                                <th>{{chsi.education}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>学院</th>
+                                                <th>{{chsi.collage}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>班级</th>
+                                                <th>{{chsi.school_class}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>专业</th>
+                                                <th>{{chsi.major}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>学号</th>
+                                                <th>{{chsi.student_id}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>教育形式</th>
+                                                <th>{{chsi.edu_type}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>入学时间</th>
+                                                <th>{{chsi.enrollment}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>学制</th>
+                                                <th>{{chsi.edu_duration}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>学籍状态</th>
+                                                <th>{{chsi.edu_status}}</th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img class="img-responsive" src="{{oss_url}}/{{chsi.head_img}}">
+                                        <img class="img-responsive" src="{{oss_url}}/{{idcard.id_pic_front}}">
+                                        <img class="img-responsive" src="{{oss_url}}/{{idcard.id_pic_self}}"></div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 review_right_panel" name="chsi_area">
+                        {% if reviews.chsi_review %}
+                        <div class="panel panel-default">
+                            {% for r in reviews.chsi_review%}
+                            <div class="panel-heading bg-info">
+                                {{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}}
+                            </div>
+                            <div class="panel-body">
+                                {%if r.review_note%}
+                                <div class="">审批备注：{{r.review_note}}</div>
+                                {%endif%}
+                            {%if r.review_message%}
+                                <div class="">打回信息： {{r.review_message}}</div>
+                                {%endif%}
+                            {%if r.reviewer.username%}
+                                <div class="reviewer">审批人： {{r.reviewer.username}}</div>
+                                {%endif%}
+                            </div>
+                            {%endfor%}
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading bg-info">家庭联系人信息</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table-responsive table table-striped">
+                                            {% for contact in contacts %}
+                                            <tr>
+                                                <th>关系</th>
+                                                <th>{{contact.get_relationship_display}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>姓名</th>
+                                                <th>{{contact.name}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>电话</th>
+                                                <th>{{contact.phone_no}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>电话是否在通讯录中</th>
+                                                <th>{{contact.get_in_addressbook_display}}</th>
+                                            </tr>
+                                            {%endfor%}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 review_right_panel" name="family_area">
+                        {% if reviews.family_review %}
+                        <div class="panel panel-default">
+                            {% for r in reviews.family_review%}
+                            <div class="panel-heading bg-info">
+                                {{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}}
+                            </div>
+                            <div class="panel-body">
+                                {%if r.review_note%}
+                                <div class="">审批备注：{{r.review_note}}</div>
+                                {%endif%}
+                            {%if r.review_message%}
+                                <div class="">打回信息： {{r.review_message}}</div>
+                                {%endif%}
+                            {%if r.reviewer.username%}
+                                <div class="reviewer">审批人： {{r.reviewer.username}}</div>
+                                {%endif%}
+                            </div>
+                            {%endfor%}
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading bg-info">银行卡信息</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    {% for bankcard in bankcards%}
+                                    <div class="col-md-8">
+                                        <table class="table-responsive table">
+                                            <tr>
+                                                <th>银行卡号</th>
+                                                <th>{{bankcard.number}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>银行名称</>
+                                                <th>{{bankcard.get_bank_type_display}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>银行卡类型</>
+                                                <th>{{bankcard.get_card_type_display}}</th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    {%endfor%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 review_right_panel" name="bank_area">
+                        {% if reviews.bank_review %}
+                        <div class="panel panel-default">
+                            {% for r in reviews.bank_review%}
+                            <div class="panel-heading bg-info">
+                                {{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}}
+                            </div>
+                            <div class="panel-body">
+                                {%if r.review_note%}
+                                <div class="">审批备注：{{r.review_note}}</div>
+                                {%endif%}
+                            {%if r.review_message%}
+                                <div class="">打回信息： {{r.review_message}}</div>
+                                {%endif%}
+                            {%if r.reviewer.username%}
+                                <div class="reviewer">审批人： {{r.reviewer.username}}</div>
+                                {%endif%}
+                            </div>
+                            {%endfor%}
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading bg-info">用户行为信息</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <table class="table-responsive table">
+                                            <tr>
+                                                <th>提交时间</th>
+                                                <th>{{apply.create_at}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>手机型号</th>
+                                                <th>{{user.device_name}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>渠道来源</th>
+                                                <th>{{user.channel}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>机器ID</th>
+                                                <th>{{user.device_id}}</th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                </div>
+                                <div class="row"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 review_right_panel" name="action_area">
+                        {% if reviews.action_review %}
+                        <div class="panel panel-default">
+                            {% for r in reviews.action_review%}
+                            <div class="panel-heading bg-info">
+                                {{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}}
+                            </div>
+                            <div class="panel-body">
+                                {%if r.review_note%}
+                                <div class="">审批备注：{{r.review_note}}</div>
+                                {%endif%}
+                            {%if r.review_message%}
+                                <div class="">打回信息： {{r.review_message}}</div>
+                                {%endif%}
+                            {%if r.reviewer.username%}
+                                <div class="reviewer">审批人： {{r.reviewer.username}}</div>
+                                {%endif%}
+                            </div>
+                            {%endfor%}
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">信用状态</h3>
+            </div>
+            <div class="box-body table-responsive">
+                <table id="rate_table" class="table table-bordered table-hover">
+                    <tr>
+                        <th>可用额度</th>
+                        <th>{{credit_limit}}</th>
+                    </tr>
+                    <tr>
+                        <th>信用评分</th>
+                        <th>无</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">贷款记录</h3>
+            </div>
+            <div class="box-body table-responsive">
+                <table id="loan_table" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>单期详情</th>
+                            <th>订单号</th>
+                            <th>申请金额</th>
+                            <th>实际打款金额</th>
+                            <th>还款状态</th>
+                            <th>申请时间</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}

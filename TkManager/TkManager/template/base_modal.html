@@ -1,0 +1,950 @@
+{% load time%}
+{% load transfer%}
+
+<!--
+{% block css %}
+    <link href="/static/style/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block js %}
+    <script src="/static/js/fileinput.min.js"></script>
+{% endblock %}
+-->
+
+{% block before %}
+{% endblock %}
+<div class="modal-dialog modal-larger">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close cancel-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      {% block header %}
+      {% endblock %}
+    </div>
+    <div class="modal-body">
+      <div class="container-fluid">
+        {% block overdue%}
+        <div class="row">
+        </div>
+        {% endblock %}
+        {% block repay%}
+        <div class="row">
+        </div>
+        {% endblock %}
+        {% block baseinfo %}
+        {% block id %}
+        <div class="row">
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    {% if labels %}
+                    <div class="panel-heading bg-info">标签</div>
+                    <div class="panel-body">
+                        {% for label in labels.all %}
+                           <span class="label label-primary review-label-list">{{label.display}}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="panel-heading bg-info">用户身份信息</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table-responsive table">
+                                    <tr>
+                                        <th>机器审批结果</th>
+                                        <th>{{check_status.get_auto_check_status_display}} {%ifequal check_status.auto_check_status 1%} <span class="glyphicon glyphicon-ok"></span> {% endifequal%}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>{{user.id}} {% if user.is_register < 0 %}({{user.get_is_register_display}}){% endif %}</th>
+                                    </tr>
+                                    <!--
+                                    <tr>
+                                        <th>信用评分</th>
+                                        <th>{{check_status.credit_score}}</th>
+                                    </tr>
+                                    -->
+                                    <tr>
+                                        <th>姓名</th>
+                                        <th>{{user.name}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>手机号</th>
+                                        <th>{{user.phone_no}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>身份证号</th>
+                                        <th>{{user.id_no}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>性别</th>
+                                        <th>{{profile.get_gender_display}}</th>
+                                    </tr>
+                                    {% if profile.marriage %}
+                                    <tr>
+                                        <th>婚姻状况</th>
+                                        <th>{{profile.get_marriage_display}}</th>
+                                    </tr>
+                                    {% endif %}
+                                    {% if profile.qq %}
+                                    <tr>
+                                        <th>qq</th>
+                                        <th>{{profile.qq}}</th>
+                                    </tr>
+                                    {% endif %}
+                                    {% if profile.expect_amount %}
+                                    <tr>
+                                        <th>预期金额</th>
+                                        <th>{{profile.expect_amount}}</th>
+                                    </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <th>渠道来源</th>
+                                        <th>{{user.channel}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>用户类型</th>
+                                        <th>{{profile.get_job_display}}</th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% block id_right %}
+            <div class="col-md-3 review_right_panel" name="id_area">
+                {% if reviews.id_review %}
+                    <div class="panel panel-default">
+                        {% for r in reviews.id_review%}
+                        <div class="panel-heading bg-info">{{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}} </div>
+                        <div class="panel-body">
+                            {%if r.review_note%}
+                            <div class="right_notes">
+                                审批备注：{{r.review_note}}
+                            </div>
+                            {%endif%}
+                            {%if r.reviewer.username%}
+                            <div class="reviewer">
+                               审批人： {{r.reviewer.username}}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {%endfor%}
+                    </div>
+                {%endif%}
+                {% block id_review %}
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        {% block work %}
+
+        <div class="row"  {% ifequal profile.job 1 %} style="display:none" {%endifequal%} >
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">用户工作信息</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table-responsive table">
+                                    <tr>
+                                        <th>公司名称</th>
+                                        <th>{{profile.company}}</th>
+                                    </tr>
+                                    {% if profile.work_post %}
+                                    <tr>
+                                        <th>工作职位</th>
+                                        <th>{{profile.work_post}}</th>
+                                    </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <th>工作电话</th>
+                                        <th>{{profile.company_phone}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>工作地点</th>
+                                        <th>{{profile.work_address}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>家庭住址</th>
+                                        <th>{{profile.family_address}}</th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% block work_right %}
+            <div class="col-md-3 review_right_panel" name="work_area">
+                {% if reviews.work_review %}
+                    <div class="panel panel-default">
+                        {% for r in reviews.work_review%}
+                        <div class="panel-heading bg-info">{{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}} </div>
+                        <div class="panel-body">
+                            {%if r.review_note%}
+                            <div class="right_notes">
+                                审批备注：{{r.review_note}}
+                            </div>
+                            {%endif%}
+                            {%if r.review_message%}
+                            <div class="right_notes">
+                               打回信息： {{r.review_message}}
+                            </div>
+                            {%endif%}
+                            {%if r.reviewer.username%}
+                            <div class="reviewer">
+                               审批人： {{r.reviewer.username}}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {%endfor%}
+                    </div>
+                {%endif%}
+                {% block work_review %}
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        {% block bank %}
+        <div class="row">
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">银行卡信息</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            {% for bankcard in bankcards%}
+                            <div class="col-md-8">
+                                <table class="table-responsive table">
+                                    <tr>
+                                        <th>银行卡号</th>
+                                        <th>{{bankcard.number}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>银行名称</th>
+                                        <th>{{bankcard.get_bank_type_display}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>银行卡类型</th>
+                                        <th>{{bankcard.get_card_type_display}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>银行卡是否重复</th>
+                                        <th>
+                                            {%ifequal bankcard.card_repeat 0%}唯一
+                                            {%else%}
+                                                <button type="button" class="btn-sm btn-danger" data-toggle="popover" class="view_cards" data-placement="right"
+                                                    title='相同银行卡用户' data-content="{%for i in bankcard.cards %} <a target='_Blank' rel='nofollow' href='/custom/query_user/?uid={{i.user.id}}'>{{i.user.name}} {{i.user.phone_no}} {{i.get_card_type_display}}</a> <br /> {%endfor%}">
+                                                    重复银行卡
+                                                </button>
+                                            {%endifequal%}
+                                        </th>
+                                    </tr>
+                                </table>
+                            </div>
+                            {%endfor%}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% block bank_right%}
+            <div class="col-md-3 review_right_panel" name="bank_area">
+                {% if reviews.bank_review %}
+                    <div class="panel panel-default">
+                        {% for r in reviews.bank_review%}
+                        <div class="panel-heading bg-info">{{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}} </div>
+                        <div class="panel-body">
+                            {%if r.review_note%}
+                            <div class="right_notes">
+                                审批备注：{{r.review_note}}
+                            </div>
+                            {%endif%}
+                            {%if r.review_message%}
+                            <div class="right_notes">
+                               打回信息： {{r.review_message}}
+                            </div>
+                            {%endif%}
+                            {%if r.reviewer.username%}
+                            <div class="reviewer">
+                               审批人： {{r.reviewer.username}}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {%endfor%}
+                    </div>
+                {%endif%}
+                {% block bank_review %}
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        {% block action %}
+      <div class="row">
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">用户行为信息</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <table class="table-responsive table">
+                                    <tr>
+                                        <th>提交时间</th>
+                                        <th>{{apply.create_at}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>手机型号</th>
+                                        <th>{{user.device_name}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>渠道来源</th>
+                                        <th>{{user.channel}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>机器ID</th>
+                                        <th>
+                                            {%ifequal user.device_id 1%}
+                                                网页注册用户，无法识别
+                                            {%else%}
+                                                {{user.device_id}}
+                                            {%endifequal%}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>机器ID是否重复</th>
+                                        <th>
+                                            {%ifequal device_id_repeat 1%}唯一
+                                            {%else%}
+                                                <button type="button" class="btn btn-warning" data-toggle="popover" id="view_ids" data-placement="right"
+                                                    title='相同手机用户' data-content="{%for i in ids %} <a target='_Blank' rel='nofollow' href='/custom/query_user/?uid={{i.id}}'>{{i.name}}   {{i.phone_no}}</a> <br /> {%endfor%}">
+                                                    出现{{device_id_repeat}}次
+                                                </button>
+                                            {%endifequal%}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>ip地址</th>
+                                        <th>{{register_ip}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>ip所在地</th>
+                                        <th></th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% block action_right %}
+            <div class="col-md-3 review_right_panel" name="action_area">
+                {% if reviews.action_review %}
+                    <div class="panel panel-default">
+                        {% for r in reviews.action_review%}
+                        <div class="panel-heading bg-info">{{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}} </div>
+                        <div class="panel-body">
+                            {%if r.review_note%}
+                            <div class="right_notes">
+                                审批备注：{{r.review_note}}
+                            </div>
+                            {%endif%}
+                            {%if r.review_message%}
+                            <div class="right_notes">
+                               打回信息： {{r.review_message}}
+                            </div>
+                            {%endif%}
+                            {%if r.reviewer.username%}
+                            <div class="reviewer">
+                               审批人： {{r.reviewer.username}}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {%endfor%}
+                    </div>
+                {%endif%}
+                {% block action_review %}
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        {% block family %}
+        <div class="row">
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">电话联系人信息</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% if new_data %}
+                                    <!--电话基本信息 -->
+                                    <span class="label label-info">手机基本信息</span>
+                                    <table class="table-responsive table table-striped">
+                                        <tr>
+                                        {%for feature in phone_basics%}
+                                            <th>{{feature.description}}</th>
+                                        {%endfor%}
+                                        </tr>
+                                        <tr>
+                                        {%for feature in phone_basics%}
+                                            {% if feature.is_ok %}
+                                                <th>{{feature.value | match_trans}}</th>
+                                            {% else %}
+                                                <th>{{feature.status}}</th>
+                                            {% endif %}
+                                        {%endfor%}
+                                        </tr>
+                                    </table>
+                                    <!-- 联系人-->
+                                    <span class="label label-info">联系人</span>
+                                    <table class="table-responsive table table-striped">
+                                        <tr>
+                                            <th>关系</th>
+                                            <th>姓名</th>
+                                            <th>电话</th>
+                                            <th>电话是否在通讯录中</th>
+                                            <th>通讯录中的姓名</th>
+                                            <th>联系人是否重复</th>
+                                        </tr>
+                                        {% for contact, addressbook_name in contacts %}
+                                        <tr>
+                                            <th>{{contact.get_relationship_display}}</th>
+                                            <th>{{contact.name}}</th>
+                                            <th>{{contact.phone_no}}</th>
+                                            <th>{{contact.get_in_addressbook_display}}</th>
+                                            <th>{{ addressbook_name }}</th>
+                                            <th>
+                                                {%ifequal contact.contact_repeat 0%}唯一
+                                                {%else%}
+                                                    <button type="button" class="btn-sm btn-danger" data-toggle="popover" class="view_contacts" data-placement="right"
+                                                        title='相同联系人' data-content="{%for i in contact.contacts %} <a target='_Blank' rel='nofollow' href='/custom/query_user/?uid={{i.owner.id}}'>{{i.owner.name}}:{{i.get_relationship_display}} {{i.name}}</a> <br /> {%endfor%}">
+                                                        重复联系人
+                                                    </button>
+                                                {%endifequal%}
+                                            </th>
+                                        </tr>
+                                        {%endfor%}
+                                    </table>
+                                    <!-- 亲密联系人 -->
+                                    <span class="label label-info">亲密联系人</span>
+                                    <table class="table-responsive table table-striped">
+                                        <tr>
+                                            <th>电话号码</th>
+                                        {% for column in  contact_phone_call_columns %}
+                                            <th>{{column}}</th>
+                                        {% endfor %}
+                                        {% if contact_phone_call_columns %}
+                                        <th>通讯录中的姓名</th>
+                                            {% endif %}
+                                        </tr>
+                                        {%for phone_call, featrue, contact_name in contact_phone_calls %}
+                                        <tr>
+                                            <th>{{phone_call}}</th>
+                                            {% for f in featrue %}
+                                            <th>{{f}}</th>
+                                            {% endfor %}
+                                            <th>{{ contact_name }}</th>
+                                        </tr>
+                                        {%endfor%}
+                                    </table>
+                                    <!-- 公司联系人 -->
+                                    {% if contact_phone_calls %}
+                                    <span class="label label-info">公司联系人</span>
+                                    <table class="table-responsive table table-striped">
+                                        <tr>
+                                            <th>电话号码</th>
+                                        {% for column in  corp_contact_phone_call_columns %}
+                                            <th>{{column}}</th>
+                                        {% endfor %}
+                                        </tr>
+                                        {%for phone_call, featrue in corp_contact_phone_calls.items %}
+                                        <tr>
+                                            <th>{{phone_call}}</th>
+                                            {% for f in featrue %}
+                                            <th>{{f}}</th>
+                                            {% endfor %}
+                                        </tr>
+                                        {%endfor%}
+                                    </table>
+                                    {% endif %}
+                                    <!-- 通讯地址 -->
+                                    {% if phone_location %}
+                                        <span class="label label-info">通讯地址</span>
+                                        {% if phone_location.is_ok %}
+                                            <table class="table-responsive table table-striped">
+                                                <tr>
+                                                    <th>位置</th>
+                                                    <th>起始时间</th>
+                                                    <th>结束时间</th>
+                                                </tr>
+                                                {% for location in phone_location.value %}
+                                                <tr>
+                                                    <th>{{location.location}}</th>
+                                                    <th>{{location.first_time}}</th>
+                                                    <th>{{location.last_time}}</th>
+                                                </tr>
+                                                {% endfor %}
+                                            </table>
+                                        {% else %}
+                                            <br/> {{phone_location.status}}
+                                        {% endif %}
+                                    {% endif %}
+                                    <button id="download_addressbook" onclick="window.location.href='/review/download_addressbook?uid={{user.id}}&pid={{apply.id}}';" class="btn btn-primary center-block">下载通讯录&通话记录</button> <br/>
+                                {% else %}
+                                <table class="table-responsive table table-striped">
+                                    {% for contact, addressbook_name in contacts %}
+                                    <tr>
+                                        <th>关系</th>
+                                        <th>{{contact.get_relationship_display}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>姓名</th>
+                                        <th>{{contact.name}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>电话</th>
+                                        <th>{{contact.phone_no}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>电话是否在通讯录中</th>
+                                        <th>{{contact.get_in_addressbook_display}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>联系人是否重复</th>
+                                        <th>
+                                            {%ifequal contact.contact_repeat 0%}唯一
+                                            {%else%}
+                                                <button type="button" class="btn-sm btn-danger" data-toggle="popover" class="view_contacts" data-placement="right"
+                                                    title='相同联系人' data-content="{%for i in contact.contacts %} <a target='_Blank' rel='nofollow' href='/custom/query_user/?uid={{i.owner.id}}'>{{i.owner.name}}:{{i.get_relationship_display}} {{i.name}}</a> <br /> {%endfor%}">
+                                                    重复联系人
+                                                </button>
+                                            {%endifequal%}
+                                        </th>
+                                    </tr>
+                                    {%endfor%}
+                                </table>
+                                <span class="divider"></span>
+                                {% block callrecord %}
+                                <table class="table-responsive table table-striped table-condensed">
+                                    <tr>
+                                        <th>姓名</th>
+                                        <th>电话</th>
+                                        <th>最近修改时间</th>
+                                        <th>重复次数</th>
+                                    </tr>
+                                    {% for address in addressbook %}
+                                    <tr>
+                                        <th>{{address.name}}</th>
+                                        <th>{{address.phone_number}}</th>
+                                        <th>{{address.create_time | print_timestamp}}</th>
+                                        <th>{{address.repeat}}</th>
+                                    </tr>
+                                    {%endfor%}
+                                </table>
+                                <table class="table-responsive table table-striped table-condensed">
+                                    <tr>
+                                        <th>电话</th>
+                                        <th>姓名</th>
+                                        <th>类型</th>
+                                        <th>通话时长</th>
+                                        <th>通话时间</th>
+                                        <th>重复次数</th>
+                                    </tr>
+                                    {% for call in callrecord %}
+                                    <tr>
+                                        <th>{{call.phone_number}}</th>
+                                        <th>{{call.name}}</th>
+                                        <th>{{call.get_call_type_display}}</th>
+                                        <th>{{call.duration}}</th>
+                                        <th>{{call.call_time}}</th>
+                                        <th>{{call.repeat}}</th>
+                                    </tr>
+                                    {%endfor%}
+                                </table>
+                                {% ifequal need_get_call 0 %}
+                                    <button id="get_call" onclick="window.location.href='/review/get_call?uid={{user.id}}';" class="btn btn-primary center-block">获取通话详单</button> <br/>
+                                {% endifequal %}
+                                <button id="download_addressbook" onclick="window.location.href='/review/download_addressbook?uid={{user.id}}&pid={{apply.id}}';" class="btn btn-primary center-block">下载完整通讯录&通话记录</button> <br/>
+                                {% endblock %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% block family_right %}
+            <div class="col-md-3 review_right_panel" name="family_area">
+                {% if reviews.family_review %}
+                    <div class="panel panel-default">
+                        {% for r in reviews.family_review%}
+                        <div class="panel-heading bg-info">{{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}} </div>
+                        <div class="panel-body">
+                            {%if r.review_note%}
+                            <div class="right_notes">
+                                审批备注：{{r.review_note}}
+                            </div>
+                            {%endif%}
+                            {%if r.review_message%}
+                            <div class="right_notes">
+                               打回信息： {{r.review_message}}
+                            </div>
+                            {%endif%}
+                            {%if r.reviewer.username%}
+                            <div class="reviewer">
+                               审批人： {{r.reviewer.username}}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {%endfor%}
+                    </div>
+                {%endif%}
+                {%block family_review%}
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        {% block pic_front %}
+        <div class="row">
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">用户身份证照片（正面）</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <img class="img-responsive" src="{{oss_url}}/{{idcard.id_pic_front}}"></img>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% block pic_front_right %}
+            <div class="col-md-3 review_right_panel" name="pic_front_area">
+                {% if reviews.pic_front_review %}
+                    <div class="panel panel-default">
+                        {% for r in reviews.pic_front_review%}
+                        <div class="panel-heading bg-info">{{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}} </div>
+                        <div class="panel-body">
+                            {%if r.review_note%}
+                            <div class="right_notes">
+                                审批备注：{{r.review_note}}
+                            </div>
+                            {%endif%}
+                            {%if r.review_message%}
+                            <div class="right_notes">
+                               打回信息： {{r.review_message}}
+                            </div>
+                            {%endif%}
+                            {%if r.reviewer.username%}
+                            <div class="reviewer">
+                               审批人： {{r.reviewer.username}}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {%endfor%}
+                    </div>
+                {%endif%}
+                {%block pic_front_review %}
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        {%block o_pick_back%}
+        <div class="row">
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">用户身份证照片（背面）</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <img class="img-responsive" src="{{oss_url}}/{{idcard.id_pic_back}}"></img>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% block o_pic_back_right%}
+            <div class="col-md-3 review_right_panel" name="o_pic_back_area">
+                {% if reviews.pic_back_review %}
+                    <div class="panel panel-default">
+                        {% for r in reviews.pic_back_review%}
+                        <div class="panel-heading bg-info">{{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}} </div>
+                        <div class="panel-body">
+                            {%if r.review_note%}
+                            <div class="right_notes">
+                                审批备注：{{r.review_note}}
+                            </div>
+                            {%endif%}
+                            {%if r.review_message%}
+                            <div class="right_notes">
+                               打回信息： {{r.review_message}}
+                            </div>
+                            {%endif%}
+                            {%if r.reviewer.username%}
+                            <div class="reviewer">
+                               审批人： {{r.reviewer.username}}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {%endfor%}
+                    </div>
+                {%endif%}
+                {% block o_pic_back_review%}
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        {%block q_pic_hand%}
+        <div class="row">
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">用户身份证照片（手持）</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <img class="img-responsive" src="{{oss_url}}/{{idcard.id_pic_self}}"></img>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% block q_pic_hand_right %}
+            <div class="col-md-3 review_right_panel" name="q_pic_hand_area">
+                {% if reviews.pic_hand_review %}
+                    <div class="panel panel-default">
+                        {% for r in reviews.pic_hand_review%}
+                        <div class="panel-heading bg-info">{{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}} </div>
+                        <div class="panel-body">
+                            {%if r.review_note%}
+                            <div class="right_notes">
+                                审批备注：{{r.review_note}}
+                            </div>
+                            {%endif%}
+                            {%if r.review_message%}
+                            <div class="right_notes">
+                               打回信息： {{r.review_message}}
+                            </div>
+                            {%endif%}
+                            {%if r.reviewer.username%}
+                            <div class="reviewer">
+                               审批人： {{r.reviewer.username}}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {%endfor%}
+                    </div>
+                {%endif%}
+                {% block q_pic_hand_review %}
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        {% block chsi %}
+        <div class="row">
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">学籍信息/电商信息</div>
+                    <div class="panel-body">
+                        {% if has_ebusiness %}
+                            <!--电商基本信息 -->
+                            <span class="label label-info">电商基本信息</span>
+                            {% if e_business.is_ok %}
+                                <table class="table-responsive table table-striped">
+                                    <tr>
+                                        <th>网站</th>
+                                        <th>用户名</th>
+                                        <th>实名认证</th>
+                                        <th>注册时间</th>
+                                    </tr>
+                                    {%for account in e_business.value %}
+                                    <tr>
+                                        <th>{{account.website}}</th>
+                                        <th>{{account.real_name}}</th>
+                                        <th>{{account.is_validate_real_name}}</th>
+                                        <th>{{account.register_date}}</th>
+                                    </tr>
+                                    {%endfor%}
+                                </table>
+                            {% else %}
+                                {{e_business.status}}
+                            {% endif %}
+                            <!--电商收货地址 -->
+                            <span class="label label-info">电商收获地址</span>
+                            {% if e_deliver.is_ok %}
+                                <table class="table-responsive table table-striped">
+                                    <tr>
+                                        <th>地址类型</th>
+                                        <th>首次送货时间</th>
+                                        <th>最后送货时间</th>
+                                        <th>使用次数</th>
+                                        <th>总金额</th>
+                                        <th>地址</th>
+                                        <th>收货人</th>
+                                    </tr>
+                                    {%for address in e_deliver.value%}
+                                    <tr>
+                                        <th>{{address.predict_addr_type}}</th>
+                                        <th>{{address.begin_date}}</th>
+                                        <th>{{address.end_date}}</th>
+                                        <th>{{address.total_count}}</th>
+                                        <th>{{address.total_amount}}</th>
+                                        <th>{{address.address}}</th>
+                                        <th>
+                                            {% for receiver in address.receiver_list %}
+                                                {{receiver.name}}:{{receiver.phone_num}}
+                                            {% endfor %}
+                                        </th>
+                                    </tr>
+                                    {%endfor%}
+                                </table>
+                            {% else %}
+                                {{e_deliver.status}}
+                            {% endif %}
+                        {% else %}
+                            {% for chsi in chsis %}
+                            <div class="row">
+                                <div class="col-md-8">
+                                    {% if not chsi.chsi_name %}
+                                    <img class="img-responsive" src="{{oss_url}}/{{chsi.chsi_name_img}}"></img>
+                                        ({{user.name}})
+                                    {% endif %}
+                                    <table class="table-responsive table">
+                                        {% if chsi.chsi_name %}
+                                        <tr>
+                                            <th>姓名</th>
+                                            <th>{{chsi.chsi_name}}
+                                                {%ifequal chsi.chsi_name user.name%} <span class="glyphicon glyphicon-ok"></span>
+                                                {%else%} <span class="glyphicon glyphicon-remove"></span> ({{user.name}})
+                                                {%endifequal%}
+                                            </th>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <th>学校</th>
+                                            <th>{{chsi.school}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>性别</th>
+                                            <th>{{chsi.gender}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>身份证号码</th>
+                                            <th>{{chsi.id_card_number}}
+                                                {%ifequal chsi.id_card_number user.id_no%} <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                                {%else%} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>({{user.id_no}})
+                                                {%endifequal%}
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>民族</th>
+                                            <th>{{chsi.nation}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>生日</th>
+                                            <th>{{chsi.birthday}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>学历</th>
+                                            <th>{{chsi.education}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>学院</th>
+                                            <th>{{chsi.collage}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>班级</th>
+                                            <th>{{chsi.school_class}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>专业</th>
+                                            <th>{{chsi.major}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>学号</th>
+                                            <th>{{chsi.student_id}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>教育形式</th>
+                                            <th>{{chsi.edu_type}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>入学时间</th>
+                                            <th>{{chsi.enrollment}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>学制</th>
+                                            <th>{{chsi.edu_duration}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>学籍状态</th>
+                                            <th>{{chsi.edu_status}}</th>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-4">
+                                    <img class="img-responsive" src="{{oss_url}}/{{chsi.head_img}}"></img>
+                                    <img class="img-responsive" src="{{oss_url}}/{{idcard.id_pic_front}}"></img>
+                                    <img class="img-responsive" src="{{oss_url}}/{{idcard.id_pic_self}}"></img>
+                                </div>
+                            </div>
+                            {% endfor %}
+                         {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% block chsi_right%}
+            <div class="col-md-3 review_right_panel" name="chsi_area">
+                {% if reviews.chsi_review %}
+                    <div class="panel panel-default">
+                        {% for r in reviews.chsi_review%}
+                        <div class="panel-heading bg-info">{{review.reviewer.name}} {{r.create_at}} {{r.get_review_status_display}} </div>
+                        <div class="panel-body">
+                            {%if r.review_note%}
+                            <div class="right_notes">
+                                审批备注：{{r.review_note}}
+                            </div>
+                            {%endif%}
+                            {%if r.review_message%}
+                            <div class="right_notes">
+                               打回信息： {{r.review_message}}
+                            </div>
+                            {%endif%}
+                            {%if r.reviewer.username%}
+                            <div class="reviewer">
+                               审批人： {{r.reviewer.username}}
+                            </div>
+                            {%endif%}
+                        </div>
+                        {%endfor%}
+                    </div>
+                {%endif%}
+                {% block chsi_review%}
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+
+
+        {% block promote %}
+        {% endblock %}
+        {% endblock %} <!-- end basic block -->
+        {% block loan %}
+        {% endblock %}
+        {% block total%}
+        {% endblock %}
+      </div>
+      {% block footer %}
+      {% endblock %}
+    </div>
+  </div>
+</div>
+{% block after %}
+{% endblock %}

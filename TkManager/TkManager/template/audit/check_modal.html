@@ -1,0 +1,70 @@
+{% extends "base_modal2.html" %}
+{% load num_compute %}
+
+{% block modal-title %}
+      <h4 class="modal-title" id="ModalLabel">财务复核：{{apply.get_type_display}}</h4>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-group">
+                <table class="table-responsive table">
+                    <tr class="info">
+                        <th>订单号</th>
+                        <th>姓名</th>
+                        <th>实还金额</th>
+                        <th>还款方式</th>
+                        <th>录入时间</th>
+                        <th>录入人</th>
+                    </tr>
+                    <tr class="success">
+                        <th>{{apply.repayment.order_number}}</th>
+                        <th>{{apply.repayment.user.name}}</th>
+                        <th>{{amount}}</th>
+                        <th>{{apply.get_type_display}}</th>
+                        <th>{{apply.create_at}}</th>
+                        <th>{{apply.create_by.username}}</th>
+                    </tr>
+               </table>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading bg-info">转账凭证</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% for pic in pics %}
+                                <img class="img-responsive" src="{{pic}}"></img>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 review_right_panel" name="promotion_area">
+            <div class="input-group">
+                备注:
+                <br/>
+                {{apply.notes}}
+            </div>
+        </div>
+        {% ifequal apply.status '0' %}
+        <div class="col-md-12">
+            <label for="amount_input">金额确认</label>
+            <input type="text" id="amount_input" value=0>
+            <label for="notes_input">备注</label>
+            <input type="text" id="notes_input" value="">
+        </div>
+        {% endifequal %}
+    </div>
+{% endblock %}
+
+{% block modal-footer %}
+    {% ifequal apply.status '0' %}
+        <button type="button" id="confirm_check" token="{{token}}" aid="{{apply.id}}" class="btn btn-primary">确认</button>
+        <button type="button" id="back_check" token="{{token}}" aid="{{apply.id}}" class="btn btn-warn">打回</button>
+    {% endifequal %}
+    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% load num_compute %}
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="ModalLabel">分配催收</h4>
+    </div>
+    <div class="modal-body">
+      <div class="container-fluid">
+        <div class="row">
+            <div class="box-body table-responsive" id="user_info" value="{{payment.user.id}}">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">借贷信息</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="box-body table-responsive">
+                                <table id="loan_table" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>单期详情</th>
+                                            <th>订单号</th>
+                                            <th>申请金额</th>
+                                            <th>实际打款金额</th>
+                                            <th>还款状态</th>
+                                            <th>申请时间</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">用户信息</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table-responsive table">
+                                    <tr>
+                                        <th>姓名</th>
+                                        <th>{{payment.user.name}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>手机号</th>
+                                        <th>{{payment.user.phone_no}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>身份证号</th>
+                                        <th>{{payment.user.id_no}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>本金金额</th>
+                                        <th>{{payment.apply_amount | math_div}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>扣款金额</th>
+                                        <th>{{rest_amount | math_div}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>贷款方式</th>
+                                        <th>{{payment.get_strategy_id_display}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>银行卡号</th>
+                                        <th>{{bank_card.number}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>银行名称</th>
+                                        <th>{{bank_card.get_bank_type_display}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>资金来源渠道</th>
+                                        <th>{{payment.get_capital_channel_id_display}}</th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-info">催收人</div>
+                    <div class="panel-body">
+                        <!--
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                选择
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                {% for collector in collectors %}
+                                <li><a uid={{collector.user.id}} href="#">{{collector.username}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        -->
+                        <select class="form-control" id="reviewer_select">
+                            {% for collector in collectors %}
+                                <option value={{collector.id}}>{{collector.username}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" id="submit_dispatch" aid="{{apply.id}}" class="btn btn-primary">分配</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+    </div>
+  </div>
+</div>

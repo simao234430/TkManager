@@ -1,0 +1,97 @@
+{%extends "base.html"%}
+
+{%block title%}代付{%endblock%}
+
+{%block css%}
+    <link type="text/css" rel="stylesheet" href="/static/style/daterangepicker-bs3.css"/>
+{%endblock%}
+{%block js%}
+    <script type="text/javascript" src="/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/daterangepicker.js"></script>
+    <script type="text/javascript" src="/static/js/waiting-dialog.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.fileDownload.js"></script>
+{%endblock%}
+{%block nav_operation%}
+        <li role="presentation" class="active">
+            <a href="/operation">运营管理</a>
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item" > <a href="pay">代付订单</a> </li>
+                    <li class="list-group-item"> <a href="repay">代扣订单</a> </li>
+                    <li class="list-group-item"> <a href="table1">资金明细</a> </li>
+                    <li class="list-group-item list-group-item-info"> <a href="table3">未还明细</a> </li>
+                    <!--
+                    <li class="list-group-item"> <a href="advance">提前还款</a> </li>
+                    -->
+                </ul>
+            </div>
+        </li>
+{%endblock%}
+
+{%block content%}
+<div class="col-md-10">
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='timeBox' name='all'>
+        <a href="#" name="all"  class="btn btn-primary" role="button">所有</a>
+        <a href="#" id='custome_time_picker' name="custom"   class="btn btn-default" role="button">自定义时间</a>
+    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='channelBox' name='mifan'>
+        <a href="#" name="mifan" class="btn btn-primary" role="button">米饭</a>
+        <a href="#" name="xintuo" class="btn btn-default" role="button">信托</a>
+    </div>
+    <p></p>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='customeType' name='all'>
+        <a href="#" name="all" class="btn btn-primary" role="button">所有</a>
+        <a href="#" name="1" class="btn btn-default" role="button">学生</a>
+        <a href="#" name="2" class="btn btn-default" role="button">工薪</a>
+        <a href="#" name="0" class="btn btn-default" role="button">其他</a>
+    </div>
+    <p></p>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='over_due_type' name='all'>
+        <a href="#" name="all"  class="btn btn-primary" role="button">所有</a>
+        <a href="#" name="already" class="btn btn-default" role="button">逾期已还</a>
+        <a href="#" name="yet" class="btn btn-default" role="button">逾期未还</a>
+        <a href="#" name="yet_already" class="btn btn-default" role="button">逾期</a>
+        <a href="#" name="normal" class="btn btn-default" role="button">正常已还</a>
+    </div>
+    <p></p>
+    <div class="btn-toolbar" role="toolbar" aria-label="..." id='over_due_time_range' name='all'>
+        <a href="#" name="all"  class="btn btn-primary" role="button">所有</a>
+        <a href="#" name="1" class="btn btn-default" role="button">1-5</a>
+        <a href="#" name="2" class="btn btn-default" role="button">5-15</a>
+        <a href="#" name="3" class="btn btn-default" role="button">15-30</a>
+        <a href="#" name="4" class="btn btn-default" role="button">30-60</a>
+        <a href="#" name="5" class="btn btn-default" role="button">60天以上</a>
+    </div>
+    <div class='boxA' id='Table'>
+        <table cellpadding="0" cellspacing="0" border="0" class="display" width="100%" id="table3">
+            <thead>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    {%for column in columns %}
+                    <th>{{column}}</th>
+                    {%endfor%}
+                </tr>
+            </tfoot>
+        </table>
+        <div class="clear"></div>
+        <div class="btn-toolbar" role="toolbar" aria-label="..." id='payBox'>
+            <a href="#" id="export_table3" class="btn btn-primary " role="button">导出报表</a>
+            <a href="#" id="export_result" class="btn btn-primary " role="button">导出结果</a>
+            <!--
+            <a href="#" id="do_pay_loan" class="btn btn-primary " role="button">银联代付</a>
+            <a href="#" id="comfirm_pay_loan_success" class="btn btn-primary " role="button">确认打款成功</a>
+            -->
+        </div>
+        <div class="modal fade bs-example-modal" id="result" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="clear"></div>
+    </div>
+</div>
+{%endblock%}
